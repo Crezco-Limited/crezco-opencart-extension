@@ -1,0 +1,257 @@
+{{ header }}{{ column_left }}
+<div id="content">
+	<div class="page-header">
+		<div class="container-fluid">
+			<div class="pull-right">
+				<button type="submit" form="form_payment" data-toggle="tooltip" title="{{ button_save }}" class="btn btn-primary"><i class="fa fa-save"></i></button>
+				<a href="{{ cancel }}" data-toggle="tooltip" title="{{ button_cancel }}" class="btn btn-default"><i class="fa fa-reply"></i></a>
+			</div>
+			<h1>{{ heading_title }}</h1>
+			<ul class="breadcrumb">
+				{% for breadcrumb in breadcrumbs %}
+				<li><a href="{{ breadcrumb['href'] }}">{{ breadcrumb['text'] }}</a></li>
+				{% endfor %}
+			</ul>
+		</div>
+	</div>
+	<div class="container-fluid">
+		{% if error_warning %}
+		<div class="alert alert-danger alert-dismissible"><i class="fa fa-exclamation-circle"></i> {{ error_warning }}
+			<button type="button" class="close" data-dismiss="alert">&times;</button>
+		</div>
+		{% endif %}
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title"><i class="fa fa-pencil"></i> {{ text_edit }}</h3>
+			</div>
+			<div class="panel-body">
+				<form action="{{ action }}" method="post" enctype="multipart/form-data" id="form_payment" class="form-horizontal">
+					<ul class="nav nav-tabs">
+						<li class="nav-tab active"><a href="#tab_general" data-toggle="tab">{{ text_general }}</a></li>
+						<li class="nav-tab"><a href="#tab_order_status" data-toggle="tab">{{ text_order_status }}</a></li>
+					</ul>
+		  
+					<div class="tab-content">
+						<div class="tab-pane active" id="tab_general">
+							<div class="form-group required">
+								<label class="col-sm-2 control-label" for="input_api_key">{{ entry_api_key }}</label>
+								<div class="col-sm-10">
+									<input type="text" name="payment_crezco_api_key" value="{{ api_key }}" placeholder="{{ entry_api_key }}" id="input_api_key" class="form-control" />
+									{% if error_api_key %}
+									<div class="text-danger">{{ error_api_key }}</div>
+									{% endif %}
+								</div>
+							</div>
+							<div class="form-group required">
+								<label class="col-sm-2 control-label" for="input_partner_id">{{ entry_partner_id }}</label>
+								<div class="col-sm-10">
+									<input type="text" name="payment_crezco_partner_id" value="{{ partner_id }}" placeholder="{{ entry_partner_id }}" id="input_partner_id" class="form-control" />
+									{% if error_partner_id %}
+									<div class="text-danger">{{ error_partner_id }}</div>
+									{% endif %}
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label" for="input_environment">{{ entry_environment }}</label>
+								<div class="col-sm-10">
+									<select name="payment_crezco_environment" id="input_environment" class="form-control">
+										{% if (environment == 'production') %}
+										<option value="production" selected="selected">{{ text_production }}</option>
+										<option value="sandbox">{{ text_sandbox }}</option>
+										{% else %}
+										<option value="production">{{ text_production }}</option>
+										<option value="sandbox" selected="selected">{{ text_sandbox }}</option>
+										{% endif %}
+									</select>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label" for="input_connect">{{ entry_connect }}</label>
+								<div class="col-sm-10">
+									<div id="section_connect" {% if user_id %}class="hidden"{% endif %}>
+										<a id="button_connect" class="btn btn-primary">{{ button_connect }}</a>
+									</div>
+									{% if user_id %}
+									<div id="section_disconnect">
+										<p class="alert alert-info">{{ text_connect }}</p>
+										<a id="button_disconnect" class="btn btn-danger">{{ button_disconnect }}</a>
+									</div>
+									{% endif %}
+									<input type="hidden" name="payment_crezco_user_id" value="{{ user_id }}" id="input_user_id" />
+									<input type="hidden" name="payment_crezco_webhook_id" value="{{ webhook_id }}" id="input_webhook_id" />
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label" for="input_debug">{{ entry_debug }}</label>
+								<div class="col-sm-10">
+									<select name="payment_crezco_debug" id="input_debug" class="form-control">
+										{% if debug %}
+										<option value="1" selected="selected">{{ text_enabled }}</option>
+										<option value="0">{{ text_disabled }}</option>
+										{% else %}
+										<option value="1">{{ text_enabled }}</option>
+										<option value="0" selected="selected">{{ text_disabled }}</option>
+										{% endif %}
+									</select>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label" for="input_total"><span data-toggle="tooltip" title="{{ help_total }}">{{ entry_total }}</span></label>
+								<div class="col-sm-10">
+									<input type="text" name="payment_crezco_total" value="{{ total }}" placeholder="{{ entry_total }}" id="input_total" class="form-control" />
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label" for="input_geo_zone">{{ entry_geo_zone }}</label>
+								<div class="col-sm-10">
+									<select name="payment_crezco_geo_zone_id" id="input_geo_zone" class="form-control">
+										<option value="0">{{ text_all_zones }}</option>
+										{% for geo_zone in geo_zones %}
+										{% if geo_zone['geo_zone_id'] == geo_zone_id %}
+										<option value="{{ geo_zone['geo_zone_id'] }}" selected="selected">{{ geo_zone['name'] }}</option>
+										{% else %}
+										<option value="{{ geo_zone['geo_zone_id'] }}">{{ geo_zone['name'] }}</option>
+										{% endif %}
+										{% endfor %}
+									</select>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label" for="input_status">{{ entry_status }}</label>
+								<div class="col-sm-10">
+									<select name="payment_crezco_status" id="input_status" class="form-control">
+										{% if status %}
+										<option value="1" selected="selected">{{ text_enabled }}</option>
+										<option value="0">{{ text_disabled }}</option>
+										{% else %}
+										<option value="1">{{ text_enabled }}</option>
+										<option value="0" selected="selected">{{ text_disabled }}</option>
+										{% endif %}
+									</select>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label" for="input_sort_order">{{ entry_sort_order }}</label>
+								<div class="col-sm-10">
+									<input type="text" name="payment_crezco_sort_order" value="{{ sort_order }}" placeholder="{{ entry_sort_order }}" id="input_sort_order" class="form-control" />
+								</div>
+							</div>
+						</div>
+						<div class="tab-pane" id="tab_order_status">
+							{% for crezco_order_status in setting['order_status'] %}
+							<div class="form-group">
+								<label class="col-sm-2 control-label" for="input_order_status_{{ crezco_order_status['code'] }}">{{ attribute(_context, crezco_order_status['name']) }}</label>
+								<div class="col-sm-10">
+									<select name="payment_crezco_setting[order_status][{{ crezco_order_status['code'] }}][id]" id="input_{{ crezco_order_status['code'] }}_status" class="form-control">
+										{% for order_status in order_statuses %}
+										{% if order_status['order_status_id'] == crezco_order_status['id'] %}
+										<option value="{{ order_status['order_status_id'] }}" selected="selected">{{ order_status['name'] }}</option>
+										{% else %}
+										<option value="{{ order_status['order_status_id'] }}">{{ order_status['name'] }}</option>
+										{% endif %}
+										{% endfor %}
+									</select>
+								</div>
+							</div>
+							{% endfor %}
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+
+function showAlert(json) {
+	$('.alert, .text-danger').remove();
+	$('.form-group').removeClass('has-error');
+						
+	if (json['error']) {
+		if (json['error']['warning']) {
+			if ($('#modal-dialog').length > 0) {
+				$('#modal-dialog .modal-body').prepend('<div class="alert alert-danger"><i class="fa fa-exclamation-circle"></i> ' + json['error']['warning'] + ' <button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+			} else {
+				$('#content > .container-fluid').prepend('<div class="alert alert-danger"><i class="fa fa-exclamation-circle"></i> ' + json['error']['warning'] + ' <button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+			}
+		}				
+				
+		for (i in json['error']) {
+			var element = $('#input_' + i);
+					
+			if (element.parent().hasClass('input-group')) {
+                $(element).parent().after('<div class="text-danger">' + json['error'][i] + '</div>');
+			} else {
+				$(element).after('<div class="text-danger">' + json['error'][i] + '</div>');
+			}
+		}				
+				
+		$('.text-danger').parents('.form-group').addClass('has-error');
+	}
+			
+	if (json['success']) {
+		$('#content > .container-fluid').prepend('<div class="alert alert-success"><i class="fa fa-check-circle"></i> ' + json['success'] + '  <button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+	}
+}
+
+$('body').on('click', '#button_connect', function() {
+	$.ajax({
+		type: 'post',
+		url: '{{ connect_url }}',
+		data: $('[name]'),
+		dataType: 'json',
+		success: function(json) {
+			showAlert(json);
+			
+			if (json['redirect']) {
+				location = json['redirect'];
+			}
+		},
+		error: function(xhr, ajaxOptions, thrownError) {
+			console.log(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+		}
+	});
+});
+
+$('body').on('click', '#button_disconnect', function() {
+	if (confirm('{{ text_confirm }}')) {		
+		$('#input_user_id').val('');
+		$('#section_connect').removeClass('hidden');
+		$('#section_disconnect').addClass('hidden');
+		
+		$.ajax({
+			type: 'post',
+			url: '{{ disconnect_url }}',
+			data: $('[name]'),
+			dataType: 'json',
+			success: function(json) {
+
+			},
+			error: function(xhr, ajaxOptions, thrownError) {
+				console.log(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+			}
+		});
+	}
+});
+
+$('body').on('change', '#input_environment', function() {	
+	$('#input_user_id').val('');
+	$('#section_connect').removeClass('hidden');
+	$('#section_disconnect').addClass('hidden');
+	
+	$.ajax({
+		type: 'post',
+		url: '{{ disconnect_url }}',
+		data: $('[name]'),
+		dataType: 'json',
+		success: function(json) {
+			
+		},
+		error: function(xhr, ajaxOptions, thrownError) {
+			console.log(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+		}
+	});
+});
+
+</script> 
+{{ footer }}
