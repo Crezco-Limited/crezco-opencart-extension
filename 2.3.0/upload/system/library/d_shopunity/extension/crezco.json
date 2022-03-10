@@ -1,0 +1,59 @@
+{
+    "codename": "crezco",
+	"version": "2.3.0",
+    "name": "Crezco",
+    "description": "Crezco",
+	"index": "extension/payment/crezco",
+   
+    "author": {
+        "name": "Dreamvention",
+        "email": "info@dreamvention.com",
+        "url": "https://dreamvention.com"
+    },
+    "opencart_version": [
+		"2.3.0.0",
+		"2.3.0.1",
+        "2.3.0.2"
+    ],
+    "type": "module",
+    "license": {
+        "type": "commercial",
+        "url": "https://shopunity.net/licenses/commercial"
+    },
+    "install": {
+        "url": "extension/payment/install&extension=crezco" 
+    },
+	"uninstall": {
+        "url": "extension/payment/uninstall&extension=crezco"
+    },
+    "support": {
+        "email": "support@dreamvention.com",
+        "url": "https:/dreamvention.com/support"
+    },
+    "files": [
+        "system/library/d_shopunity/extension/crezco.json",
+		"system/config/crezco.php",
+										
+		"admin/controller/extension/payment/crezco.php",
+		"admin/model/extension/payment/crezco.php",
+		"admin/language/en-gb/extension/payment/crezco.php",
+		"admin/view/template/extension/payment/crezco.tpl",
+		"admin/view/image/payment/crezco.png",
+				
+		"catalog/controller/extension/payment/crezco.php",
+		"catalog/model/extension/payment/crezco.php",
+		"catalog/language/en-gb/extension/payment/crezco.php",
+		"catalog/view/theme/default/template/extension/payment/crezco.tpl"
+    ],
+	"dirs": [
+        "system/library/crezco",
+		
+		"catalog/view/theme/default/template/extension/payment/crezco"
+    ],
+    "changelog": [
+		{
+            "version": "2.3.0",
+            "change": ""
+        }
+    ]
+}
